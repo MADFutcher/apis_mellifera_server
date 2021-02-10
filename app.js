@@ -7,6 +7,7 @@ const favicon      = require('serve-favicon');
 const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
+const cors         = require('cors')
 const path         = require('path');
 
 
@@ -30,6 +31,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(cors({
+  origin: 'http://localhost:5000',
+  credentials: true,
+}))
+
+app.use(cors({
+  origin: 'http://yourapp.com'
+}));
+
 // Express View engine setup
 
 app.use(require('node-sass-middleware')({
@@ -45,10 +55,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 
-
 // default value for title local
 app.locals.title = 'Express - Generated with IronGenerator';
-
 
 
 const index = require('./routes/index');
