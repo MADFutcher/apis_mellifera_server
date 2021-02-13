@@ -5,6 +5,28 @@ const User       = require('../models/user-model');
 const Hive       = require('../models/hive-model');
 
 
+hiveRoutes.post('/hives/new', (req,res,next)=>{
+  const {title, age, location, race, info, owner} = req.body
+  console.log(req.body)
+  Hive.create({title,
+                age,
+                location,
+                race,
+                info,
+                owner
+          })
+          .then(newHive =>{
+            User.findByIdAndUpdate(newHive.owner,{$push: {"hives": newHive._id}},{new:true})
+                .then((updatedUser)=>{return  res.status(200).json({ message: updatedUser });})
+            return;
+          })
+          .catch(err =>{
+            res.status(500).json({ message: err });
+          })
+
+})
+
+
 //Get hives for specific owner
 hiveRoutes.get('/hives/:ownerId', (req,res,next) =>{
   const {owner} = req.params.ownerId
@@ -31,23 +53,7 @@ hiveRoutes.get('/hive/:hiveId', (req,res,next) =>{
 
 })
 
-hiveRoutes.post('/hives/new', (req,res,next)=>{
-  const {age, location, race, info, owner} = req.body
-  Hive.create({age,
-                  location,
-                  race,
-                  info,
-                  owner
-          })
-          .then(newHive =>{
-            User.findByIdAndUpdate(newHive.owner,{$push: {"hives": newHive._id}},{new:true}).then((updatedUser)=>{return  res.status(200).json({ message: updatedUser });})
-            return;
-          })
-          .catch(err =>{
-            res.status(500).json({ message: err });
-          })
 
-})
 
 
 module.exports = hiveRoutes;
