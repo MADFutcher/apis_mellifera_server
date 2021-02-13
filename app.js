@@ -15,7 +15,7 @@ const passport      = require('passport');
 require('./configs/passport');
 
 mongoose
-  .connect('mongodb://localhost/project-management-server', {useNewUrlParser: true})
+  .connect('mongodb://localhost/apis-mellifera-server', {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -73,5 +73,7 @@ app.use('/', index);
 const authRoutes = require('./routes/auth-routes');
 app.use('/api', authRoutes);
 
+const hiveRoutes = require('./routes/hive-routes');
+app.use('/api', hiveRoutes);
 
 module.exports = app;

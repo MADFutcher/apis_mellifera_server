@@ -7,9 +7,9 @@ const User       = require('../models/user-model');
 
 
 authRoutes.post('/signup', (req,res,next)=>{
-  const {username, password, firstname, surname} = req.body
+  const {username, password, firstname, surname, email} = req.body
 
-  if(!username || !password || !firstname || !surname){
+  if(!username || !password || !firstname || !surname || !email){
     res.status(400).json({message: "please provide username, password, firstname and surname"});
     return
   }
@@ -38,12 +38,13 @@ authRoutes.post('/signup', (req,res,next)=>{
         username,
         password: hashPass,
         firstname,
-        surname
+        surname,
+        email
     });
 
     aNewUser.save(err => {
         if (err) {
-            res.status(500).json({ message: 'Saving user to database went wrong.' });
+            res.status(500).json({ message: err });
             return;
         }
         

@@ -8,34 +8,39 @@ passport.serializeUser((loggedInUser, cb) => {
 });
 
 passport.deserializeUser((userIdFromSession, cb) => {
-  User.findById(userIdFromSession, (err, userDocument) => {
+  User.findById(userIdFromSession)
+  .populate('hives')
+  .exec((err, userDocument) => {
     if (err) {
       cb(err);
       return;
     }
+    console.log(userDocument)
     cb(null, userDocument);
   });
 });
 
 passport.use(new LocalStrategy((username, password, next) => {
-  User.findOne({ username }, (err, foundUser) => {
-    if (err) {
-      next(err);
-      return;
-    }
+  User.findOne({ username })
+      .populate('hives')
+      .exec((err, foundUser) => {
+        if (err) {
+          next(err);
+          return;
+        }
 
-    if (!foundUser) {
-      next(null, false, { message: 'Incorrect username.' });
-      return;
-    }
+        if (!foundUser) {
+          next(null, false, { message: 'Incorrect username.' });
+          return;
+        }
 
-    if (!bcrypt.compareSync(password, foundUser.password)) {
-      next(null, false, { message: 'Incorrect password.' });
-      return;
-    }
+        if (!bcrypt.compareSync(password, foundUser.password)) {
+          next(null, false, { message: 'Incorrect password.' });
+          return;
+        }
 
-    next(null, foundUser);
-  });
+        next(null, foundUser);
+      })
 }));
 
 
