@@ -5,6 +5,46 @@ const User       = require('../models/user-model');
 const Hive       = require('../models/hive-model');
 
 
+//Get hives for specific owner
+hiveRoutes.get('/hives/:ownerId', (req,res,next) =>{
+  const {owner} = req.params.ownerId
+  Hive.find({owner})
+      .then(theHives =>{
+        return res.status(200).json(theHives);
+      })
+      .catch(err =>{
+        return res.status(500).json(err)
+      })
+})
+
+//get Specific Hive
+hiveRoutes.get('/hive/:hiveId', (req,res,next) =>{
+  const {hiveId} = req.params
+  Hive.findById(hiveId)
+      .then(theHive =>{
+        return res.status(200).json(theHive);
+      })
+      .catch(err =>{
+        return res.status(500).json(err)
+      })
+
+})
+
+
+//update Specific Hive
+hiveRoutes.post('/hive/:hiveId', (req,res,next)=>{
+  console.log("request to update hive")
+  console.log("++++++++++++++++++++++++++++++++")
+  console.log(req.body)
+  console.log("++++++++++++++++++++++++++++++++")
+  const hiveId = req.body._id
+  Hive.findByIdAndUpdate(hiveId, req.body ,{new:true})
+      .then(updatedHive => {return res.status(200).json(updatedHive)})
+      .catch(err => {return res.status(500).json({message: err})})
+})
+
+
+
 hiveRoutes.post('/hives/new', (req,res,next)=>{
   const {title, age, location, race, info, owner} = req.body
   console.log(req.body)
@@ -27,31 +67,9 @@ hiveRoutes.post('/hives/new', (req,res,next)=>{
 })
 
 
-//Get hives for specific owner
-hiveRoutes.get('/hives/:ownerId', (req,res,next) =>{
-  const {owner} = req.params.ownerId
-  Hive.find({owner})
-      .then(theHives =>{
-        return res.status(200).json(theHives);
-      })
-      .catch(err =>{
-        return res.status(500).json(err)
-      })
-})
 
-//get Specific Hive
-hiveRoutes.get('/hive/:hiveId', (req,res,next) =>{
-  const {hiveId} = req.params
-  Hive.findById(hiveId)
-      .then(theHive =>{
-        console.log(theHive)
-        return res.status(200).json(theHive);
-      })
-      .catch(err =>{
-        return res.status(500).json(err)
-      })
 
-})
+
 
 
 
