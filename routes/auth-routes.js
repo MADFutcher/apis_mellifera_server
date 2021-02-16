@@ -2,7 +2,7 @@ const express    = require('express');
 const authRoutes = express.Router();
 const passport   = require('passport');
 const bcrypt     = require('bcryptjs');
-
+const authController = require('../controller/authController') 
 const User       = require('../models/user-model');
 
 
@@ -79,7 +79,7 @@ authRoutes.post('/login', (req, res, next) => {
               res.status(500).json({ message: 'Session save went bad.' });
               return;
           }
-          res.status(200).json(theUser);
+          authController.createSendToken(theUser, req, res)
       });
   })(req, res, next);
 });

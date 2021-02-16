@@ -76,4 +76,7 @@ app.use('/api', authRoutes);
 const hiveRoutes = require('./routes/hive-routes');
 app.use('/api', hiveRoutes);
 
+const secureRoutes = require('./routes/secure-routes');
+app.use('/test', secureRoutes);
+
 module.exports = app;

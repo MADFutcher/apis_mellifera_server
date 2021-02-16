@@ -1,6 +1,6 @@
 const express    = require('express');
 const hiveRoutes = express.Router();
-
+const authController = require('../controller/authController')
 const User       = require('../models/user-model');
 const Hive       = require('../models/hive-model');
 
@@ -33,10 +33,6 @@ hiveRoutes.get('/hive/:hiveId', (req,res,next) =>{
 
 //update Specific Hive
 hiveRoutes.post('/hive/:hiveId', (req,res,next)=>{
-  console.log("request to update hive")
-  console.log("++++++++++++++++++++++++++++++++")
-  console.log(req.body)
-  console.log("++++++++++++++++++++++++++++++++")
   const hiveId = req.body._id
   Hive.findByIdAndUpdate(hiveId, req.body ,{new:true})
       .then(updatedHive => {return res.status(200).json(updatedHive)})
@@ -45,7 +41,7 @@ hiveRoutes.post('/hive/:hiveId', (req,res,next)=>{
 
 
 
-hiveRoutes.post('/hives/new', (req,res,next)=>{
+hiveRoutes.post('/hives/new', authController.protect, (req,res,next)=>{
   const {title, age, location, race, info, owner} = req.body
   console.log(req.body)
   Hive.create({title,
