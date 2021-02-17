@@ -11,6 +11,7 @@ const path         = require('path');
 const cors         = require('cors');
 const session       = require('express-session');
 const passport      = require('passport');
+const globalErrorHandler = require('./controller/ErrorController')
 
 require('./configs/passport');
 
@@ -78,5 +79,6 @@ app.use('/api', hiveRoutes);
 
 const secureRoutes = require('./routes/secure-routes');
 app.use('/test', secureRoutes);
+app.use(globalErrorHandler)
 
 module.exports = app;

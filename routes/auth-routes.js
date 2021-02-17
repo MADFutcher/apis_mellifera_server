@@ -3,6 +3,7 @@ const authRoutes = express.Router();
 const passport   = require('passport');
 const bcrypt     = require('bcryptjs');
 const authController = require('../controller/authController') 
+
 const User       = require('../models/user-model');
 
 
@@ -88,6 +89,7 @@ authRoutes.post('/logout', (req, res, next) => {
   req.logout();
   res.status(200).json({ message: 'Log out success!' });
 });
+
 
 authRoutes.get('/loggedin', (req, res, next) => {
   if (req.isAuthenticated()) {

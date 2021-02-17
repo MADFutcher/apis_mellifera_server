@@ -32,7 +32,7 @@ hiveRoutes.get('/hive/:hiveId', (req,res,next) =>{
 
 
 //update Specific Hive
-hiveRoutes.post('/hive/:hiveId', (req,res,next)=>{
+hiveRoutes.post('/hive/:hiveId', authController.protect, (req,res,next)=>{
   const hiveId = req.body._id
   Hive.findByIdAndUpdate(hiveId, req.body ,{new:true})
       .then(updatedHive => {return res.status(200).json(updatedHive)})
@@ -43,7 +43,7 @@ hiveRoutes.post('/hive/:hiveId', (req,res,next)=>{
 
 hiveRoutes.post('/hives/new', authController.protect, (req,res,next)=>{
   const {title, age, location, race, info, owner} = req.body
-  console.log(req.body)
+  console.log("hello")
   Hive.create({title,
                 age,
                 location,
@@ -57,7 +57,7 @@ hiveRoutes.post('/hives/new', authController.protect, (req,res,next)=>{
             return;
           })
           .catch(err =>{
-            res.status(500).json({ message: err });
+            res.status(500).json(err);
           })
 
 })
